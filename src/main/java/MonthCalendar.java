@@ -1,4 +1,7 @@
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.MonthDay;
+import java.time.Year;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,31 +39,30 @@ public class MonthCalendar {
         int dayOfWeekCounter = firstDayOfMonth.getValue();
         int dayCounter = 1;
         while (dayCounter <= daysInMonth) {
-            LocalDate currentLocalDate = LocalDate.of(year, month, dayCounter);
-            DayOfWeek ofWeek = LocalDate.of(year, month, dayCounter).getDayOfWeek();
-            if (LocalDate.now().equals(currentLocalDate)) {
-                result.append(ANSI_YELLOW)
-                        .append(String.format("%-6s", dayCounter++))
-                        .append(ANSI_RESET);
-            } else if (holidays.contains(ofWeek)) {
-                result.append(ANSI_RED)
-                        .append(String.format("%-6s", dayCounter++))
-                        .append(ANSI_RESET);
-            } else {
-                result.append(String.format("%-6d", dayCounter++));
-            }
+            result.append(getStringRepresentationOfMonthDay(dayCounter++));
 
             if (++dayOfWeekCounter > 7) {
                 result.append("\n");
                 dayOfWeekCounter = 1;
             }
         }
-
         return result.toString();
     }
 
-    private boolean isLeapYear() {
-        return (year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0));
+    private String getStringRepresentationOfMonthDay(int day) {
+        LocalDate currentLocalDate = LocalDate.of(year, month, day);
+        DayOfWeek dayOfWeek = LocalDate.of(year, month, day).getDayOfWeek();
+        if (LocalDate.now().equals(currentLocalDate)) {
+            return ANSI_YELLOW
+                    .concat(String.format("%-6s", day))
+                    .concat(ANSI_RESET);
+        } else if (holidays.contains(dayOfWeek)) {
+            return ANSI_RED
+                    .concat(String.format("%-6s", day))
+                    .concat(ANSI_RESET);
+        } else {
+            return String.format("%-6d", day);
+        }
     }
 
     private String getBlankDaysOfWeek(DayOfWeek firstDayOfWeek) {
@@ -73,5 +75,9 @@ public class MonthCalendar {
             }
         }
         return result.toString();
+    }
+
+    private boolean isLeapYear() {
+        return (year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0));
     }
 }
