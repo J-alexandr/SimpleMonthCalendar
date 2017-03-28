@@ -10,7 +10,11 @@ public class Application {
             monthValue = Integer.parseInt(args[0]);
         }
 
-        MonthCalendar simpleCalendar = new MonthCalendar(monthValue);
-        System.out.println(simpleCalendar.toString());
+        try {
+            MonthCalendar simpleCalendar = new MonthCalendar(monthValue);
+            System.out.println(simpleCalendar.toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid argument provided");
+        }
     }
 }

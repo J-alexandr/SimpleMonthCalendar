@@ -17,6 +17,9 @@ public class MonthCalendar {
     private final List<DayOfWeek> holidays = Arrays.asList(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
 
     public MonthCalendar(Integer month) {
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException();
+        }
         this.month = month;
         this.year = Year.now().getValue();
     }
