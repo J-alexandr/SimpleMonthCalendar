@@ -60,7 +60,6 @@ public class MonthCalendar {
     }
 
     private boolean isLeapYear() {
-        int year = LocalDateTime.now().getYear();
         return (year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0));
     }
 
