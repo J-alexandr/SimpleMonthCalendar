@@ -1,3 +1,5 @@
+package com.interlink.incamp;
+
 import java.time.LocalDateTime;
 
 public class Application {
