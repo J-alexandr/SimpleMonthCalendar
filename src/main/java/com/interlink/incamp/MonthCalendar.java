@@ -4,17 +4,18 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 public class MonthCalendar {
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_RESET = "\u001B[0m";
+    private final String ANSI_RED = "\u001B[31m";
+    private final String ANSI_YELLOW = "\u001B[33m";
+    private final String ANSI_RESET = "\u001B[0m";
+    private final List<DayOfWeek> HOLIDAYS = Arrays.asList(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
     private final Integer FIRST_DAY_OF_MONTH_VALUE = 1;
     private final Integer year;
     private final Integer month;
-    private final List<DayOfWeek> holidays = Arrays.asList(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY);
 
     public MonthCalendar(Integer month) {
         if (month < 1 || month > 12) {
@@ -31,16 +32,21 @@ public class MonthCalendar {
     }
 
     private String getTableHeader() {
+        DayOfWeek[] values = DayOfWeek.values();
+        List<String> shortDaysOfWeek = new ArrayList<>(Arrays.asList(values))
+                .stream()
+                .map(dayOfWeek -> dayOfWeek.toString().substring(0, 3))
+                .collect(toList());
+
         return String.format("%-6s%-6s%-6s%-6s%-6s" + ANSI_RED + "%-6s%-6s" + ANSI_RESET,
-                "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
+                shortDaysOfWeek.toArray());
     }
 
     private String getMonthAsFormattedString() {
-        int daysInMonth = MonthDay.of(month, 1).getMonth().length(isLeapYear());
         DayOfWeek firstDayOfMonth = LocalDate.of(year, month, FIRST_DAY_OF_MONTH_VALUE).getDayOfWeek();
-
         StringBuilder result = new StringBuilder(getBlankDaysOfWeek(firstDayOfMonth));
 
+        int daysInMonth = MonthDay.of(month, 1).getMonth().length(Year.isLeap(year));
         int dayOfWeekCounter = firstDayOfMonth.getValue();
         int dayCounter = 1;
         while (dayCounter <= daysInMonth) {
@@ -61,7 +67,7 @@ public class MonthCalendar {
             return ANSI_YELLOW
                     .concat(String.format("%-6s", day))
                     .concat(ANSI_RESET);
-        } else if (holidays.contains(dayOfWeek)) {
+        } else if (HOLIDAYS.contains(dayOfWeek)) {
             return ANSI_RED
                     .concat(String.format("%-6s", day))
                     .concat(ANSI_RESET);
@@ -80,9 +86,5 @@ public class MonthCalendar {
             }
         }
         return result.toString();
-    }
-
-    private boolean isLeapYear() {
-        return (year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0));
     }
 }
