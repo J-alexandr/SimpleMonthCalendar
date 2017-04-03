@@ -14,7 +14,7 @@ public class Application {
             MonthCalendar simpleCalendar = new MonthCalendar(monthValue);
             System.out.println(simpleCalendar.toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid argument provided");
+            System.err.println("Invalid argument provided");
         }
     }
 }
