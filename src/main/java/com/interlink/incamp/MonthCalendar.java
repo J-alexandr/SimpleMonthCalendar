@@ -4,7 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -32,8 +34,8 @@ public class MonthCalendar {
     }
 
     private String getTableHeader() {
-        DayOfWeek[] values = DayOfWeek.values();
-        List<String> shortDaysOfWeek = new ArrayList<>(Arrays.asList(values))
+        DayOfWeek[] daysOfWeek = DayOfWeek.values();
+        List<String> shortDaysOfWeek = new ArrayList<>(Arrays.asList(daysOfWeek))
                 .stream()
                 .map(dayOfWeek -> dayOfWeek.toString().substring(0, 3))
                 .collect(toList());
